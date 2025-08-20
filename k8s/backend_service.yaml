@@ -1,0 +1,13 @@
+# Creates an internal service to expose the backend application within the cluster.
+# The OpenShift Route will target this service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb_CRUD_server
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: mongodb_CRUD_server
+  type: ClusterIP
