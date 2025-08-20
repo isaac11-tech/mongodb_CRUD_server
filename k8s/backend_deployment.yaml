@@ -1,0 +1,39 @@
+# Deploys the FastAPI backend application.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb_CRUD_server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb_CRUD_server
+  template:
+    metadata:
+      labels:
+        app: mongodb_CRUD_server
+    spec:
+      containers:
+        - name: mongodb_CRUD_server
+          image: moshezeiger/data-loader:1.4
+          ports:
+            - containerPort: 8080
+          env:
+            # Inject database connection details from the Secret
+            - name: DB_HOST
+              value: "mongo" # The name of the MySQL service
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_DATABASE
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_PASSWORD
